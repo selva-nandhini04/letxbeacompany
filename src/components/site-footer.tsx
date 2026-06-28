@@ -6,8 +6,8 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div>
-            <div className="font-display text-2xl">
-              let <em className="text-gradient not-italic">x</em> be
+            <div className="font-display text-2xl tracking-tight">
+              let <em className="text-gradient not-italic">x</em> be a company
             </div>
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               Websites and web apps engineered as customer-generating engines.
