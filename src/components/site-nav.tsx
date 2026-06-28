@@ -17,7 +17,7 @@ export function SiteNav() {
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
         <Link to="/" className="flex items-center gap-2 text-lg">
-          <span className="font-display text-2xl">let <em className="text-gradient not-italic font-display">x</em> be</span>
+          <span className="font-display text-xl tracking-tight">let <em className="text-gradient not-italic font-medium">x</em> be a company</span>
         </Link>
 
         <nav className="hidden items-center gap-1 rounded-full border border-border bg-surface-elevated/60 px-2 py-1.5 backdrop-blur md:flex">
