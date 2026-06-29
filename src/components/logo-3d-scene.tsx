@@ -1,21 +1,11 @@
-import { Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
 import { useGLTF, Environment, ContactShadows, OrbitControls } from "@react-three/drei";
 
 function Model() {
   const { scene } = useGLTF("/logo.glb");
-  const modelRef = useRef<any>(null);
-  const isDragging = useRef(false);
-
-  // Only auto-rotate when the user is NOT dragging
-  useFrame((_state, delta) => {
-    if (modelRef.current && !isDragging.current) {
-      modelRef.current.rotation.y += delta * 0.4;
-    }
-  });
-
   return (
-    <group ref={modelRef} dispose={null}>
+    <group dispose={null}>
       <primitive object={scene} scale={3} position={[0, -0.5, 0]} />
     </group>
   );
@@ -41,13 +31,15 @@ export function Logo3DScene() {
 
       <Environment preset="city" />
 
-      {/* 360-degree drag controls — disables auto-rotate while user drags */}
+      {/* 360-degree drag controls — autoRotate is handled natively and pauses when dragging */}
       <OrbitControls
         enableZoom={false}
         enablePan={false}
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={(3 * Math.PI) / 4}
         rotateSpeed={0.6}
+        autoRotate={true}
+        autoRotateSpeed={2.5}
       />
 
       <Suspense fallback={null}>
@@ -59,7 +51,7 @@ export function Logo3DScene() {
           blur={2.5}
           far={5}
           color="#8b5cf6"
-        />
+         />
       </Suspense>
     </Canvas>
   );

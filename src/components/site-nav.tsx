@@ -73,7 +73,7 @@ export function SiteNav() {
 
       {/* Mobile / tablet drawer */}
       {open && (
-        <div className="fixed inset-0 top-16 z-40 flex flex-col bg-background/95 backdrop-blur-xl md:hidden">
+        <div className="fixed inset-0 top-16 z-40 flex flex-col bg-background md:hidden">
           <nav className="flex flex-col gap-1 px-4 pt-6 pb-4">
             {links.map((l) => (
               <Link
