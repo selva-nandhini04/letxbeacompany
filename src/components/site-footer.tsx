@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { LogoInline } from "./logo-inline";
 
 export function SiteFooter() {
   return (
@@ -7,7 +8,7 @@ export function SiteFooter() {
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div>
             <div className="font-display text-2xl tracking-tight">
-              let <em className="text-gradient not-italic">x</em> be a company
+              let<LogoInline />be a company
             </div>
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               Websites and web apps engineered as customer-generating engines.
