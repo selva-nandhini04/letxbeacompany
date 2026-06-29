@@ -5,6 +5,9 @@ import { LogoInline } from "../components/logo-inline";
 import { useCurrency } from "../lib/use-currency";
 
 import { submitContactFn } from "../serverFns";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import type { Country } from "react-phone-number-input";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -27,8 +30,30 @@ function Contact() {
     ? ["< ₹10k", "₹10k to ₹50k", "₹50k to ₹1 Lakh", "₹1 Lakh+"]
     : ["< $2k", "$2k to $5k", "$5k to $15k", "$15k+"];
 
+  const [phone, setPhone] = useState<string>();
+  const [countryCode, setCountryCode] = useState<Country>("US");
+  const [phoneError, setPhoneError] = useState("");
+
+  useEffect(() => {
+    fetch("https://ipapi.co/json/")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.country_code) {
+          setCountryCode(data.country_code as Country);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setPhoneError("");
+
+    if (!phone || !isValidPhoneNumber(phone)) {
+      setPhoneError("Please enter a valid phone number.");
+      return;
+    }
+
     setLoading(true);
     const data = new FormData(e.currentTarget);
     try {
@@ -36,6 +61,7 @@ function Contact() {
         data: {
           name: data.get("name") as string,
           email: data.get("email") as string,
+          phone: phone,
           type: data.get("type") as string,
           budget: data.get("budget") as string,
           message: data.get("message") as string,
@@ -71,6 +97,20 @@ function Contact() {
             <div className="grid gap-5 sm:grid-cols-2">
               <Field label="Name" name="name" required />
               <Field label="Email" name="email" type="email" required />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Phone number <span className="text-red-500">*</span></label>
+              <div className="mt-2 w-full rounded-2xl border border-border bg-background/60 px-4 py-3 text-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+                <PhoneInput
+                  international
+                  countryCallingCodeEditable={false}
+                  defaultCountry={countryCode}
+                  value={phone}
+                  onChange={setPhone}
+                  className="flex items-center gap-3 w-full"
+                />
+              </div>
+              {phoneError && <p className="mt-1 text-xs text-red-500">{phoneError}</p>}
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
               <SelectField label="Project type" name="type" options={["Website", "Web application", "Both", "Not sure yet"]} />
@@ -135,6 +175,30 @@ function Contact() {
           </aside>
         </div>
       </section>
+      <style>{`
+        .PhoneInputInput {
+          background: transparent;
+          border: none;
+          outline: none;
+          color: inherit;
+          font-size: 0.875rem;
+          width: 100%;
+        }
+        .PhoneInputCountryIcon {
+          width: 24px;
+          height: 16px;
+          box-shadow: none;
+          border-radius: 2px;
+          overflow: hidden;
+        }
+        .PhoneInputCountryIconImg {
+          object-fit: cover;
+        }
+        .PhoneInputCountrySelectArrow {
+          margin-left: 0.25rem;
+          opacity: 0.5;
+        }
+      `}</style>
     </>
   );
 }

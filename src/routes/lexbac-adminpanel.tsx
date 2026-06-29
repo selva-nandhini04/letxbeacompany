@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { getContactsFn } from "../serverFns";
 
 export const Route = createFileRoute("/lexbac-adminpanel")({
@@ -8,6 +9,7 @@ export const Route = createFileRoute("/lexbac-adminpanel")({
 
 function AdminPanel() {
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -75,13 +77,22 @@ function AdminPanel() {
           </div>
           <div>
             <label className="text-sm font-medium">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mt-2 w-full rounded-2xl border border-border bg-background/60 px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-            />
+            <div className="relative mt-2 w-full">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full rounded-2xl border border-border bg-background/60 px-4 py-3 pr-12 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
           <button
             type="submit"
@@ -116,6 +127,7 @@ function AdminPanel() {
                   <th className="px-6 py-4 font-medium">Date</th>
                   <th className="px-6 py-4 font-medium">Name</th>
                   <th className="px-6 py-4 font-medium">Email</th>
+                  <th className="px-6 py-4 font-medium">Phone</th>
                   <th className="px-6 py-4 font-medium">Type</th>
                   <th className="px-6 py-4 font-medium">Budget</th>
                 </tr>
@@ -123,7 +135,7 @@ function AdminPanel() {
               <tbody className="divide-y divide-border">
                 {contacts.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
+                    <td colSpan={6} className="px-6 py-8 text-center text-muted-foreground">
                       No submissions yet.
                     </td>
                   </tr>
@@ -135,6 +147,7 @@ function AdminPanel() {
                       </td>
                       <td className="px-6 py-4 font-medium">{contact.name}</td>
                       <td className="px-6 py-4">{contact.email}</td>
+                      <td className="px-6 py-4">{contact.phone || "-"}</td>
                       <td className="px-6 py-4">{contact.type}</td>
                       <td className="px-6 py-4">{contact.budget}</td>
                     </tr>

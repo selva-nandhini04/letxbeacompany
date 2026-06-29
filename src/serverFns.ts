@@ -17,6 +17,7 @@ export const submitContactFn = createServerFn({ method: "POST" })
   .validator((d: {
     name: string;
     email: string;
+    phone: string;
     type: string;
     budget: string;
     message: string;
@@ -27,6 +28,7 @@ export const submitContactFn = createServerFn({ method: "POST" })
       {
         name: data.name,
         email: data.email,
+        phone: data.phone,
         type: data.type,
         budget: data.budget,
         message: data.message,
