@@ -92,7 +92,7 @@ function Contact() {
       </section>
 
       <section className="mx-auto max-w-5xl px-6 pb-24">
-        <div className="grid gap-8 md:grid-cols-[1fr_320px]">
+        <div className="grid gap-8 md:grid-cols-[1fr_380px]">
           <form onSubmit={onSubmit} className="glass-card rounded-3xl p-8 space-y-5">
             <div className="grid gap-5 sm:grid-cols-2">
               <Field label="Name" name="name" required />
@@ -140,10 +140,10 @@ function Contact() {
               <Mail className="h-5 w-5 text-primary" />
               <div className="mt-3 text-sm text-muted-foreground">Drop us an email</div>
               <a
-                href="mailto:prakash04082002@gmail.com"
-                className="mt-1 block font-display text-lg break-all hover:text-primary transition-colors"
+                href="mailto:omprakash.esakkimuthu@letxbeacompany.com"
+                className="mt-1 block font-display text-base md:text-lg break-all hover:text-primary transition-colors"
               >
-                prakash04082002@gmail.com
+                omprakash.esakkimuthu@letxbeacompany.com
               </a>
             </div>
             <div className="glass-card rounded-3xl p-6">
