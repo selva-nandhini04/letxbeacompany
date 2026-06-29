@@ -4,6 +4,8 @@ import { Mail, ArrowUpRight, Check, Phone, ChevronDown } from "lucide-react";
 import { LogoInline } from "../components/logo-inline";
 import { useCurrency } from "../lib/use-currency";
 
+import { submitContactFn } from "../serverFns";
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
@@ -18,18 +20,34 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { symbol, isIndia } = useCurrency();
 
   const budgetOptions = isIndia
     ? ["< ₹10k", "₹10k to ₹50k", "₹50k to ₹1 Lakh", "₹1 Lakh+"]
     : ["< $2k", "$2k to $5k", "$5k to $15k", "$15k+"];
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const data = new FormData(e.currentTarget);
-    const body = `Project type: ${data.get("type")}%0DBudget: ${data.get("budget")}%0D%0D${data.get("message")}`;
-    window.location.href = `mailto:prakash04082002@gmail.com?subject=Project enquiry from ${data.get("name")}&body=${body}`;
-    setSent(true);
+    try {
+      await submitContactFn({
+        data: {
+          name: data.get("name") as string,
+          email: data.get("email") as string,
+          type: data.get("type") as string,
+          budget: data.get("budget") as string,
+          message: data.get("message") as string,
+        }
+      });
+      setSent(true);
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,9 +88,10 @@ function Contact() {
             </div>
             <button
               type="submit"
-              className="inline-flex h-12 items-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground shadow-[var(--shadow-elegant)]"
+              disabled={loading || sent}
+              className="inline-flex h-12 items-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground shadow-[var(--shadow-elegant)] disabled:opacity-50 transition-opacity"
             >
-              {sent ? <><Check className="h-4 w-4" /> Sent</> : <>Send enquiry <ArrowUpRight className="h-4 w-4" /></>}
+              {sent ? <><Check className="h-4 w-4" /> Sent</> : loading ? "Sending..." : <>Send enquiry <ArrowUpRight className="h-4 w-4" /></>}
             </button>
           </form>
 
